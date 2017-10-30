@@ -25,6 +25,32 @@ PJ_THIRD_PARTY_PATH="${BASE_FOLDER}/third_party"
 
 TARGET_HEADER_PATHS=("${PJLIB_PATH}" "${PJLIB_UTIL_PATH}" "${PJMEDIA_PATH}" "${PJNATH_PATH}" "${PJSIP_PATH}")
 
+function config_site() {
+    PJSIP_CONFIG_PATH="${PJLIB_PATH}/include/pj/config_site.h"
+    # HAS_VIDEO=
+
+    echo "Creating config_site.h ..."
+
+    if [ -f "${PJSIP_CONFIG_PATH}" ]; then
+        rm "${PJSIP_CONFIG_PATH}"
+    fi
+
+    echo "#define PJ_CONFIG_IPHONE 1" >> "${PJSIP_CONFIG_PATH}"
+    echo "#define PJ_HAS_IPV6 1" >> "${PJSIP_CONFIG_PATH}" # Enable IPV6
+    # if [[ ${OPENH264_PREFIX} ]]; then
+    #     echo "#define PJMEDIA_HAS_OPENH264_CODEC 1" >> "${PJSIP_CONFIG_PATH}"
+    #     HAS_VIDEO=1
+    # fi
+    # if [[ ${HAS_VIDEO} ]]; then
+    #     echo "#define PJMEDIA_HAS_VIDEO 1" >> "${PJSIP_CONFIG_PATH}"
+    #     echo "#define PJMEDIA_VIDEO_DEV_HAS_OPENGL 1" >> "${PJSIP_CONFIG_PATH}"
+    #     echo "#define PJMEDIA_VIDEO_DEV_HAS_OPENGL_ES 1" >> "${PJSIP_CONFIG_PATH}"
+    #     echo "#define PJMEDIA_VIDEO_DEV_HAS_IOS_OPENGL 1" >> "${PJSIP_CONFIG_PATH}"
+    #     echo "#include <OpenGLES/ES3/glext.h>" >> "${PJSIP_CONFIG_PATH}"
+    # fi
+    echo "#include <pj/config_site_sample.h>" >> "${PJSIP_CONFIG_PATH}"
+}
+
 function mkdirArch
 {
     echo mkdirARch
@@ -123,7 +149,7 @@ function makeClean {
     done
 }
 
-
+config_site
 mkdirArch
 makeLibrary
 makeHeader
