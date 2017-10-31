@@ -9,7 +9,7 @@ HEADER_PATH="$LIBRARY_PATH/pjsip-include"
 FAT_LIBRARY_PATH="$LIBRARY_PATH/pjsip-lib"
 DEVPATH="/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer"
 
-ARCH_LIST="i386 armv7 armv7s arm64"
+ARCH_LIST="x86_64 i386 armv7 armv7s arm64"
 
 ####### header 部分处理
 PJLIB_PATH="${BASE_FOLDER}/pjlib"
@@ -96,7 +96,7 @@ function makeLibrary
     do
         cd $BASE_FOLDER
 
-        if [ "$arch" == "i386" ]
+        if [ "$arch" == "i386" || "$arch" == "x86_64" ]
         then
             ARCH="-arch $arch" CFLAGS="-O2 -m32 -mios-simulator-version-min=5.0" LDFLAGS="-O2 -m32 -mios-simulator-version-min=5.0" \
                 DEVPATH="/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer" \
