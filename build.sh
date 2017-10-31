@@ -9,7 +9,7 @@ HEADER_PATH="$LIBRARY_PATH/pjsip-include"
 FAT_LIBRARY_PATH="$LIBRARY_PATH/pjsip-lib"
 DEVPATH="/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer"
 
-ARCH_LIST="x86_64 i386 armv7 armv7s arm64"
+ARCH_LIST="i386 x86_64 armv7 armv7s arm64"
 
 ####### header 部分处理
 PJLIB_PATH="${BASE_FOLDER}/pjlib"
@@ -32,7 +32,7 @@ function config_site() {
     fi
 
     echo "#define PJ_CONFIG_IPHONE 1" >> "${PJSIP_CONFIG_PATH}"
-    echo "#define PJ_HAS_IPV6 1" >> "${PJSIP_CONFIG_PATH}" # Enable IPV6
+    # echo "#define PJ_HAS_IPV6 1" >> "${PJSIP_CONFIG_PATH}" # Enable IPV6
     # if [[ ${OPENH264_PREFIX} ]]; then
     #     echo "#define PJMEDIA_HAS_OPENH264_CODEC 1" >> "${PJSIP_CONFIG_PATH}"
     #     HAS_VIDEO=1
@@ -95,11 +95,11 @@ function makeLibrary
     for arch in $ARCH_LIST;
     do
         cd $BASE_FOLDER
-
-        if [ "$arch" == "i386" || "$arch" == "x86_64" ]
+        echo "++++++++++ $arch"
+        if [ "$arch" == "i386" ] || [ "$arch" == "x86_64" ]
         then
-            ARCH="-arch $arch" CFLAGS="-O2 -m32 -mios-simulator-version-min=5.0" LDFLAGS="-O2 -m32 -mios-simulator-version-min=5.0" \
-                DEVPATH="/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer" \
+            ARCH="-arch $arch" CFLAGS="-O2 -m32 -mios-simulator-version-min=8.0" LDFLAGS="-O2 -m32 -mios-simulator-version-min=8.0" \
+                DEVPATH="`xcrun -sdk iphonesimulator --show-sdk-platform-path`/Developer" \
                 ./configure-iphone --prefix=`pwd`/$LIBRARY_PATH/$arch/ && make dep && make clean && make
         else
             ARCH="-arch $arch" ./configure-iphone --prefix=`pwd`/$LIBRARY_PATH/$arch/ && make dep && make clean && make
