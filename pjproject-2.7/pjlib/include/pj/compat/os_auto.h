@@ -28,14 +28,14 @@
  */
 
 /* Canonical OS name */
-#define PJ_OS_NAME "arm64-apple-darwin_ios"
+#define PJ_OS_NAME "x86_64-unknown-linux-gnu"
 
 /* Legacy macros */
 /* #undef PJ_WIN32 */
 /* #undef PJ_WIN32_WINNT */
 /* #undef WIN32_LEAN_AND_MEAN */
-#define PJ_DARWINOS 1
-/* #undef PJ_LINUX */
+/* #undef PJ_DARWINOS */
+#define PJ_LINUX 1
 /* #undef PJ_RTEMS */
 /* #undef PJ_SUNOS */
 /* #undef PJ_ANDROID */
@@ -51,8 +51,8 @@
 #define PJ_HAS_ERRNO_H 1
 #define PJ_HAS_FCNTL_H 1
 #define PJ_HAS_LIMITS_H 1
-/* #undef PJ_HAS_LINUX_SOCKET_H */
-/* #undef PJ_HAS_MALLOC_H */
+#define PJ_HAS_LINUX_SOCKET_H 1
+#define PJ_HAS_MALLOC_H 1
 #define PJ_HAS_NETDB_H 1
 #define PJ_HAS_NETINET_IN_SYSTM_H 1
 #define PJ_HAS_NETINET_IN_H 1
@@ -74,8 +74,8 @@
 #define PJ_HAS_SYS_TIME_H 1
 #define PJ_HAS_SYS_TIMEB_H 1
 #define PJ_HAS_SYS_TYPES_H 1
-#define PJ_HAS_SYS_FILIO_H 1
-#define PJ_HAS_SYS_SOCKIO_H 1
+/* #undef PJ_HAS_SYS_FILIO_H */
+/* #undef PJ_HAS_SYS_SOCKIO_H */
 #define PJ_HAS_SYS_UTSNAME_H 1
 #define PJ_HAS_TIME_H 1
 #define PJ_HAS_UNISTD_H 1
@@ -109,7 +109,7 @@
 /* Set 1 if native sockaddr_in has sin_len member. 
  * Default: 0
  */
-#define PJ_SOCKADDR_HAS_LEN 1
+/* #undef PJ_SOCKADDR_HAS_LEN */
 
 /* Does the OS have socklen_t? */
 #define PJ_HAS_SOCKLEN_T 1
@@ -218,7 +218,7 @@
 
 /* SSL socket availability. */
 #ifndef PJ_HAS_SSL_SOCK
-/* #undef PJ_HAS_SSL_SOCK */
+#define PJ_HAS_SSL_SOCK 1
 #endif
 
 

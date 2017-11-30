@@ -490,6 +490,11 @@ void Call::makeCall(const string &dst_uri, const CallOpParam &prm) throw(Error)
                                             param.p_msg_data, &id) );
 }
 
+int Call::setKey(char *input,unsigned int len)
+{
+    pjmedia_set_key((unsigned char*)input,len);
+}
+
 void Call::answer(const CallOpParam &prm) throw(Error)
 {
     call_param param(prm.txOption, prm.opt, prm.reason);

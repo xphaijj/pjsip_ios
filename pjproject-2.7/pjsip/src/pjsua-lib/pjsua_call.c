@@ -4148,6 +4148,7 @@ static pj_status_t create_sdp_of_call_hold(pjsua_call *call,
 static void pjsua_call_on_rx_offer(pjsip_inv_session *inv,
 				   const pjmedia_sdp_session *offer)
 {
+	printf("----->> start pjsua_call_on_rx_offer");
     pjsua_call *call;
     pjmedia_sdp_session *answer;
     unsigned i;
@@ -4171,7 +4172,8 @@ static void pjsua_call_on_rx_offer(pjsip_inv_session *inv,
     if (pjsua_var.ua_cfg.cb.on_call_rx_offer) {
 	pjsip_status_code code = PJSIP_SC_OK;
 	pjsua_call_setting opt;
-
+	
+	printf("----->> start all_on_rx_offer");
 	opt = call->opt;
 	(*pjsua_var.ua_cfg.cb.on_call_rx_offer)(call->index, offer, NULL,
 						&code, &opt);

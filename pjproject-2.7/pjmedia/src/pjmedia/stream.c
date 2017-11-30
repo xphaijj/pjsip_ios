@@ -1380,6 +1380,7 @@ static pj_status_t put_frame_imp( pjmedia_port *port,
 
     stream->is_streaming = PJ_TRUE;
 
+	deal_send(channel->out_pkt,frame_out.size,sizeof(pjmedia_rtp_hdr));
     /* Send the RTP packet to the transport. */
     status = pjmedia_transport_send_rtp(stream->transport, channel->out_pkt,
                                         frame_out.size +
