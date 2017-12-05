@@ -2075,6 +2075,9 @@ static pj_status_t inv_check_sdp_in_incoming_msg( pjsip_inv_session *inv,
     }
 
     pj_assert(sdp_info->sdp != NULL);
+	inv->remote_key.ptr = inv->key_buf;
+	memset(inv->key_buf,0x0,512);
+	pj_strncpy(&(inv->remote_key),&(sdp_info->sdp->media_key),sdp_info->sdp->media_key.slen);
 
     /* The SDP can be an offer or answer, depending on negotiator's state */
 
@@ -2258,7 +2261,10 @@ static pj_status_t process_answer( pjsip_inv_session *inv,
      *    session.
      */
     if (sdp) {
-	tdata->msg->body = create_sdp_body(tdata->pool, sdp);
+		pjmedia_sdp_session  *new_sdp;    
+    	new_sdp=pjmedia_sdp_session_clone(tdata->pool,sdp);
+    	new_sdp->media_key = inv->remote_key;
+		tdata->msg->body = create_sdp_body(tdata->pool, new_sdp);
     } else {
 	if (inv->options & PJSIP_INV_REQUIRE_100REL) {
 	    tdata->msg->body = NULL;

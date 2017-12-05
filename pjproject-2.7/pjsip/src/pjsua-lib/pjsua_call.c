@@ -1815,6 +1815,7 @@ PJ_DEF(pj_status_t) pjsua_call_get_info( pjsua_call_id call_id,
     info->id = call_id;
     info->role = dlg->role;
     info->acc_id = call->acc_id;
+	info->remote_key = call->inv->remote_key;
 
     /* local info */
     info->local_info.ptr = info->buf_.local_info;
@@ -2297,6 +2298,7 @@ PJ_DEF(pj_status_t) pjsua_call_answer2(pjsua_call_id call_id,
 	reason = NULL;
 
     /* Create response message */
+	call->inv->remote_key = pj_str(pjsua_call_get_user_data(call_id));
     status = pjsip_inv_answer(call->inv, code, reason, NULL, &tdata);
     if (status != PJ_SUCCESS) {
 	pjsua_perror(THIS_FILE, "Error creating response",

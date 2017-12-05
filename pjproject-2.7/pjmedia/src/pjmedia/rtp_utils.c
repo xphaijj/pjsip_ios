@@ -1,5 +1,7 @@
 #include "pjmedia/rtp_utils.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <memory.h>
 const unsigned char *keyBuf = NULL;
 unsigned int buffer_length=0;
 unsigned short orgin_en_seqnum = 0;
@@ -29,6 +31,8 @@ unsigned short BLEndianUshort(unsigned short value) {
 
 int pjmedia_key_clear()
 {
+    if(keyBuf)
+        free(keyBuf);
     keyBuf = NULL;
     buffer_length=0;
     orgin_en_seqnum = 0;
@@ -53,7 +57,12 @@ int pjmedia_set_key(unsigned char* keybuf,unsigned int buflen)
 	}
 	//printf("have set a key!\r\n");
 	buffer_length = buflen;
-	keyBuf = keybuf;
+    if (!keyBuf) 
+        keyBuf=malloc(buflen);
+    if(keyBuf)
+        memcpy(keyBuf,keybuf,buflen);
+	else
+        return -1;
 	return 0;
 }
 
