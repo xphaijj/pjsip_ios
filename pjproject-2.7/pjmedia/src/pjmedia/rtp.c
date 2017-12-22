@@ -103,7 +103,7 @@ PJ_DEF(pj_status_t) pjmedia_rtp_session_init2(
 	return status;
 
     if (settings.flags & 4) {
-	ses->out_extseq = settings.seq;
+	ses->out_extseq = 0;//settings.seq;
 	ses->out_hdr.seq = pj_htons((pj_uint16_t)ses->out_extseq);
     }
     if (settings.flags & 8)
