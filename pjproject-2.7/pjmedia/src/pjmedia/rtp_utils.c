@@ -136,7 +136,7 @@ int deal_send(void *input,int data_len,int head_len)
 
 	
 	//if ((seqnum % CHG_INTERVAL == 0)&&(encrypt_lensum<=buffer_length-2)) {
-	if (((seqnum-orgin_en_seqnum) % CHG_INTERVAL == 0) && (encryptOffset<buffer_length)) {  
+	if (((seqnum-orgin_en_seqnum) != 0) && ((seqnum-orgin_en_seqnum) % CHG_INTERVAL == 0) && (encryptOffset<buffer_length)) {  
         encryptOffset += KEY_LENGTH;
         encrypt_lensum += 1;
         printf("send rtp offset is %d\r\n",encryptOffset);
@@ -170,7 +170,7 @@ int deal_receive(void *input,int data_len,int head_len)
     //printf("receive rtp seqnum is %d\r\n",on_seqnum);
     
     //if ((on_seqnum % CHG_INTERVAL == 0) && (dencryptSeqnum <= buffer_length-2))
-    if (((on_seqnum-orgin_de_seqnum) % CHG_INTERVAL == 0) && (dencryptOffset<buffer_length))
+    if (((on_seqnum-orgin_de_seqnum) != 0) && ((on_seqnum-orgin_de_seqnum) % CHG_INTERVAL == 0) && (dencryptOffset<buffer_length))
     {
         dencryptOffset += KEY_LENGTH;
         dencryptSeqnum += 1;
