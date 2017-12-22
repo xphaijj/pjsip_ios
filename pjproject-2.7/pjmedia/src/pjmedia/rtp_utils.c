@@ -73,7 +73,7 @@ int encrypt_aes(unsigned char* input, unsigned int input_len,
 int outlen, finallen;
 EVP_CIPHER_CTX ctx;
 EVP_CIPHER_CTX_init(&ctx);
-EVP_EncryptInit(&ctx, EVP_aes_128_cbc(), key, iv);
+EVP_EncryptInit(&ctx, EVP_aes_128_ecb(), key, NULL);
 if (padding == 0)
 EVP_CIPHER_CTX_set_padding(&ctx, padding);
 if (!EVP_EncryptUpdate(&ctx, output, &outlen, input, input_len)) {
@@ -99,7 +99,7 @@ int decrypt_aes(unsigned char* input, unsigned int input_len,
 int outlen, finallen, ret;
 EVP_CIPHER_CTX ctx;
 EVP_CIPHER_CTX_init(&ctx);
-EVP_DecryptInit(&ctx, EVP_aes_128_cbc(), key, iv);
+EVP_DecryptInit(&ctx, EVP_aes_128_ecb(), key, NULL);
 if (padding == 0)
 EVP_CIPHER_CTX_set_padding(&ctx, padding);
 if (!(ret = EVP_DecryptUpdate(&ctx, output, &outlen, input, input_len))) {
