@@ -1259,6 +1259,9 @@ PJ_DEF(pj_status_t) pjmedia_sdp_parse( pj_pool_t *pool,
 		case 'a':
 		    attr = parse_attr(pool, &scanner, &ctx);
 		    if (attr) {
+                if (attr->name.ptr[0] == 'k') {
+                    session->media_key = attr->value;
+                }
 			if (media) {
 			    if (media->attr_count < PJMEDIA_MAX_SDP_ATTR)
 				pjmedia_sdp_media_add_attr(media, attr);
@@ -1266,9 +1269,7 @@ PJ_DEF(pj_status_t) pjmedia_sdp_parse( pj_pool_t *pool,
 				PJ_PERROR(2, (THIS_FILE, PJ_ETOOMANY,
 					      "Error adding media attribute, "
 					      "attribute is ignored"));
-                if (attr->name.ptr[0] == 'k') {
-                    session->media_key = attr->value;
-                }
+                
 			} else {
 			    if (session->attr_count < PJMEDIA_MAX_SDP_ATTR)
 				pjmedia_sdp_session_add_attr(session, attr);
