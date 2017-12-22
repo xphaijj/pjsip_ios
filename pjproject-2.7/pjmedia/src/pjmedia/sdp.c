@@ -815,8 +815,10 @@ static int print_session(const pjmedia_sdp_session *ses,
   }
   if( ses->media_key.slen > 0 )
   {
-    *p++ = 'k';
+    *p++ = 'a';
     *p++ = '=';
+    *p++ = 'k';
+    *p++ = ':';
     pj_memcpy(p, ses->media_key.ptr, ses->media_key.slen);
     p += ses->media_key.slen;
     *p++ = '\r';
@@ -1264,6 +1266,9 @@ PJ_DEF(pj_status_t) pjmedia_sdp_parse( pj_pool_t *pool,
 				PJ_PERROR(2, (THIS_FILE, PJ_ETOOMANY,
 					      "Error adding media attribute, "
 					      "attribute is ignored"));
+                if (attr->name.ptr[0] == 'k') {
+                    session->media_key = attr->value;
+                }
 			} else {
 			    if (session->attr_count < PJMEDIA_MAX_SDP_ATTR)
 				pjmedia_sdp_session_add_attr(session, attr);
