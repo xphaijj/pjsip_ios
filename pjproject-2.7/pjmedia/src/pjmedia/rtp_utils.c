@@ -129,9 +129,9 @@ int deal_send(void *input,int data_len,int head_len)
 		seqnum = BLEndianUshort(seqnum);
 	}
 	//printf("send rtp seqnum is %d\r\n",seqnum);
-	if (orgin_en_seqnum == 0)
+	if (orgin_en_seqnum != 0)
 	{
-		orgin_en_seqnum = seqnum;
+		orgin_en_seqnum = 0;
 	}
 
 	
@@ -164,8 +164,8 @@ int deal_receive(void *input,int data_len,int head_len)
     if (!checkCPU()) {
         on_seqnum = BLEndianUshort(on_seqnum);
     }
-    if (orgin_de_seqnum == 0) {
-        orgin_de_seqnum = on_seqnum;
+    if (orgin_de_seqnum != 0) {
+        orgin_de_seqnum = 0;
     }
     //printf("receive rtp seqnum is %d\r\n",on_seqnum);
     

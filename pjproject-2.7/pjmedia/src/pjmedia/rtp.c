@@ -65,7 +65,7 @@ PJ_DEF(pj_status_t) pjmedia_rtp_session_init( pjmedia_rtp_session *ses,
 
     /* Initial sequence number SHOULD be random, according to RFC 3550. */
     /* According to RFC 3711, it should be random within 2^15 bit */
-    ses->out_extseq = pj_rand() & 0x7FFF;
+    ses->out_extseq = 0;//pj_rand() & 0x7FFF;
     ses->peer_ssrc = 0;
     
     /* Build default header for outgoing RTP packet. */
