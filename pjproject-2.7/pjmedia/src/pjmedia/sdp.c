@@ -1237,6 +1237,7 @@ PJ_DEF(pj_status_t) pjmedia_sdp_parse( pj_pool_t *pool,
     pjmedia_sdp_bandw *bandw;
     pj_str_t dummy;
     int cur_name = 254;
+    pj_str_t tmp_media_key;
     parse_context ctx;
     PJ_USE_EXCEPTION;
 
@@ -1287,7 +1288,7 @@ PJ_DEF(pj_status_t) pjmedia_sdp_parse( pj_pool_t *pool,
 		    parse_generic_line(&scanner, &session->name, &ctx);
 		    break;
         case 'k':
-            parse_generic_line(&scanner, &session->media_key, &ctx);
+            parse_generic_line(&scanner, &tmp_media_key, &ctx);
             break;
 		case 'c':
 		    conn = PJ_POOL_ZALLOC_T(pool, pjmedia_sdp_conn);
