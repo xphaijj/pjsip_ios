@@ -4,14 +4,6 @@
 #include <memory.h>
 const unsigned char *keyBuf = NULL;
 unsigned int buffer_length=0;
-unsigned short orgin_en_seqnum = 0;
-unsigned short orgin_de_seqnum = 0;
-
-static unsigned short seqnum = 0;
-static int encrypt_lensum = 0;
-
-static unsigned short on_seqnum=0;
-static int dencryptSeqnum = 0;
 
 int checkCPU()
 {  
@@ -33,14 +25,6 @@ int pjmedia_key_clear()
         free(keyBuf);
     keyBuf = NULL;
     buffer_length=0;
-    orgin_en_seqnum = 0;
-    orgin_de_seqnum = 0;
-
-    seqnum = 0;
-    encrypt_lensum = 0;
-
-    on_seqnum=0;
-    dencryptSeqnum = 0;
     return 0;
 }
 
@@ -118,20 +102,12 @@ int deal_send(void *input,int data_len,int head_len)
 {
     if(!keyBuf) return -1;
 
-	seqnum = *((unsigned short*)((unsigned char*)input + 2));
+	unsigned short seqnum = *((unsigned short*)((unsigned char*)input + 2));
 
-    if (!checkCPU()) 
-    {
+    if (!checkCPU()) {
 		seqnum = BLEndianUshort(seqnum);
 	}
-	//printf("send rtp seqnum is %d\r\n",seqnum);
-	if (orgin_en_seqnum != 0)
-	{
-		orgin_en_seqnum = 0;
-	}
 
-	
-	//if ((seqnum % CHG_INTERVAL == 0)&&(encrypt_lensum<=buffer_length-2)) {
     int encryptOffset = seqnum/CHG_INTERVAL*KEY_LENGTH;
     if (encryptOffset >= (buffer_length-KEY_LENGTH)) {
         encryptOffset = (buffer_length-KEY_LENGTH);
@@ -148,13 +124,11 @@ int deal_receive(void *input,int data_len,int head_len)
     if(!keyBuf) return -1;
     //取出包序号：
     
-    on_seqnum =  *((unsigned short*)((pj_uint8_t*)input + 2));
+    unsigned short on_seqnum =  *((unsigned short*)((pj_uint8_t*)input + 2));
     if (!checkCPU()) {
         on_seqnum = BLEndianUshort(on_seqnum);
     }
-    if (orgin_de_seqnum != 0) {
-        orgin_de_seqnum = 0;
-    }
+
     int dencryptOffset = on_seqnum/CHG_INTERVAL*KEY_LENGTH;
     if (dencryptOffset >= (buffer_length-KEY_LENGTH)) {
         dencryptOffset = (buffer_length-KEY_LENGTH);
