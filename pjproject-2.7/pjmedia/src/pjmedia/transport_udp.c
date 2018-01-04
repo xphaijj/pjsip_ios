@@ -468,7 +468,6 @@ static void on_rx_rtp( pj_ioqueue_key_t *key,
 		discard = PJ_TRUE;
 	    }
 	}
-	printf("-----<><>bytes_read%d", bytes_read);
 	if ((bytes_read-12)%16==0) {
 		deal_receive(udp->rtp_pkt, bytes_read-12, 12);
 	}
