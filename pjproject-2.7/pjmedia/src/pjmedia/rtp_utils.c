@@ -7,11 +7,9 @@ unsigned int buffer_length=0;
 unsigned short orgin_en_seqnum = 0;
 unsigned short orgin_de_seqnum = 0;
 
-static int encryptOffset = 0;
 static unsigned short seqnum = 0;
 static int encrypt_lensum = 0;
 
-static int dencryptOffset = 0;
 static unsigned short on_seqnum=0;
 static int dencryptSeqnum = 0;
 
@@ -38,11 +36,9 @@ int pjmedia_key_clear()
     orgin_en_seqnum = 0;
     orgin_de_seqnum = 0;
 
-    encryptOffset = 0;
     seqnum = 0;
     encrypt_lensum = 0;
 
-    dencryptOffset = 0;
     on_seqnum=0;
     dencryptSeqnum = 0;
     return 0;
@@ -136,23 +132,11 @@ int deal_send(void *input,int data_len,int head_len)
 
 	
 	//if ((seqnum % CHG_INTERVAL == 0)&&(encrypt_lensum<=buffer_length-2)) {
-    encryptOffset = seqnum/CHG_INTERVAL*KEY_LENGTH;
+    int encryptOffset = seqnum/CHG_INTERVAL*KEY_LENGTH;
     if (encryptOffset >= (buffer_length-KEY_LENGTH)) {
         encryptOffset = (buffer_length-KEY_LENGTH);
     }
-	// if (((seqnum-orgin_en_seqnum) != 0) && ((seqnum-orgin_en_seqnum) % CHG_INTERVAL == 0) && (encryptOffset<(buffer_length-KEY_LENGTH))) {  
-    //     encryptOffset += KEY_LENGTH;
-    //     encrypt_lensum += 1;
-    //     printf("send rtp offset is %d\r\n",encryptOffset);
-    // }
-    //printf("send rtp encrypt_lensum is %d\r\n",encrypt_lensum);
 
-    
-	// int i;
-	// for(i=0;i<KEY_LENGTH;++i)
-	// {
-	// 	//printf("%02x ",*(keyBuf+encryptOffset+i));
-    // }
 	unsigned char* iv = "0102030405060708";
     //printf("send rtp data length: %d, header length: %d",data_len,head_len);
     encrypt_aes((unsigned char*)input+head_len,data_len, (unsigned char*)input+head_len, data_len, keyBuf+encryptOffset, iv, 0);
@@ -171,44 +155,11 @@ int deal_receive(void *input,int data_len,int head_len)
     if (orgin_de_seqnum != 0) {
         orgin_de_seqnum = 0;
     }
-    //printf("receive rtp seqnum is %d\r\n",on_seqnum);
-    
-    //if ((on_seqnum % CHG_INTERVAL == 0) && (dencryptSeqnum <= buffer_length-2))
-    dencryptOffset = on_seqnum/CHG_INTERVAL*KEY_LENGTH;
+    int dencryptOffset = on_seqnum/CHG_INTERVAL*KEY_LENGTH;
     if (dencryptOffset >= (buffer_length-KEY_LENGTH)) {
         dencryptOffset = (buffer_length-KEY_LENGTH);
     }
-
-    // if (((on_seqnum-orgin_de_seqnum) != 0) && ((on_seqnum-orgin_de_seqnum) % CHG_INTERVAL == 0) && (dencryptOffset<(buffer_length-KEY_LENGTH)))
-    // {
-    //     dencryptOffset += KEY_LENGTH;
-    //     dencryptSeqnum += 1;
-    //     printf("receive rtp offset is %d\r\n",dencryptOffset);
-    // }
-    //printf("receive rtp encrypt_lensum is %d\r\n",dencryptSeqnum);
-
-    
-    //for (i = 0; i < size/(RTP_HEADER_BYTE+RTP_PACK_BYTE); i++) {
-        //int header = i*(RTP_PACK_BYTE+RTP_HEADER_BYTE);
-        //if (*(input+header)) {
-            unsigned char* iv="0102030405060708";
-            
-            int i;
-            for(i=0;i<KEY_LENGTH;++i)
-            {
-                //printf("%02x ",*(keyBuf+dencryptOffset+i));
-            }
-            decrypt_aes((unsigned char*)input+head_len, data_len, (unsigned char*)input+head_len, data_len, keyBuf+dencryptOffset, iv, 0);
-        //}
-    //}
-    //printf("receive rtp offset is%d\r\n",dencryptOffset);
-
-    /*int i;
-    for(i=0;i<pkt_len;++i)
-    {
-        *((unsigned char*)(pkt)+RTP_HEADER_BYTE+i)=~*((unsigned char*)(pkt)+RTP_HEADER_BYTE+i);
-        //*((unsigned char*)(pkt)+offset+i)=~*((unsigned char*)(pkt)+offset+i);
-    }*/
-
+    unsigned char* iv="0102030405060708";   
+    decrypt_aes((unsigned char*)input+head_len, data_len, (unsigned char*)input+head_len, data_len, keyBuf+dencryptOffset, iv, 0);
     return 0;
 }
