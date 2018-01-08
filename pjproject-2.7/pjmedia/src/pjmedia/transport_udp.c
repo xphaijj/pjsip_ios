@@ -468,7 +468,7 @@ static void on_rx_rtp( pj_ioqueue_key_t *key,
 		discard = PJ_TRUE;
 	    }
 	}
-	if ((bytes_read-12)%16==0) {
+	if ((bytes_read > 12) && (bytes_read-12)%16==0) {
 		deal_receive(udp->rtp_pkt, bytes_read-12, 12);
 	}
 	/* See if source address of RTP packet is different than the 

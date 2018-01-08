@@ -114,7 +114,6 @@ int deal_send(void *input,int data_len,int head_len)
     }
 
 	unsigned char* iv = "0102030405060708";
-    //printf("send rtp data length: %d, header length: %d",data_len,head_len);
     encrypt_aes((unsigned char*)input+head_len,data_len, (unsigned char*)input+head_len, data_len, keyBuf+encryptOffset, iv, 0);
 
     return 0;
