@@ -56,7 +56,7 @@
 #endif
 #include <assert.h>
 
-#include <aes.h>
+#include "pjmedia/aes_cfb.h"
 #include "aes_locl.h"
 
 #if !defined(OPENSSL_FIPS_AES_ASM)

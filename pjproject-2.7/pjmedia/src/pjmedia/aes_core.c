@@ -38,7 +38,7 @@
 #include <stdlib.h>
 #include <aes.h>
 //#include <openssl/fips.h>
-#include "aes_locl.h"
+#include "pjmedia/aes_locl.h"
 
 #ifndef OPENSSL_FIPS
 

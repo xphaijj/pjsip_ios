@@ -112,8 +112,8 @@
 #endif
 #include <assert.h>
 
-#include <aes.h>
-#include "aes_locl.h"
+#include "pjmedia/aes_cfb.h"
+#include "pjmedia/aes_locl.h"
 #include "pjmedia/e_os.h"
 
 /* The input and output encrypted as though 128bit cfb mode is being
