@@ -38,7 +38,7 @@ For AES192/256 the block size is proportionally larger.
 #include <stdint.h>
 #include <string.h> // CBC mode, for memset
 #include <stdlib.h>
-#include "pjmedia/tiny_aes.h"
+#include "pjmedia/aes.h"
 
 /*****************************************************************************/
 /* Defines:                                                                  */

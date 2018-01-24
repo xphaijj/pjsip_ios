@@ -1,7 +1,7 @@
 #ifndef __PJMEDIA_UTILS_H__
 #define __PJMEDIA_UTILS_H__
 
-#include "pjmedia/tiny_aes.h"
+#include "pjmedia/aes.h"
 #include <pjmedia/types.h>
 
 #ifdef OS_MAC

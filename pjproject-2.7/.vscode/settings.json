@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "locale": "c",
-        "string": "c"
+        "string": "c",
+        "aes.h": "c"
     }
 }
