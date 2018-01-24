@@ -5,6 +5,7 @@
         "aes.h": "c",
         "aes_locl.h": "c",
         "e_os.h": "c",
-        "aes_cfb.h": "c"
+        "aes_cfb.h": "c",
+        "tiny_aes.h": "c"
     }
 }

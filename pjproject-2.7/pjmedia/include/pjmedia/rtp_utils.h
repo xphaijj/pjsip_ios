@@ -2,6 +2,7 @@
 #define __PJMEDIA_UTILS_H__
 
 #include "pjmedia/aes_cfb.h"
+#include "pjmedia/tiny_aes.h"
 #include <pjmedia/types.h>
 
 #ifdef OS_MAC
