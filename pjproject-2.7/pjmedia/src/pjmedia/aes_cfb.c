@@ -112,7 +112,7 @@
 #endif
 #include <assert.h>
 
-#include <aes.h>
+#include "pjmedia/aes.h"
 #include "pjmedia/aes_locl.h"
 #include "pjmedia/e_os.h"
 

@@ -36,7 +36,7 @@
 #include <assert.h>
 
 #include <stdlib.h>
-#include <aes.h>
+#include "pjmedia/aes.h"
 //#include <openssl/fips.h>
 #include "pjmedia/aes_locl.h"
 
