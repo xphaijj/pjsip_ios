@@ -49,53 +49,19 @@ int pjmedia_set_key(unsigned char* keybuf,unsigned int buflen)
 int encrypt_aes(unsigned char* input, unsigned int input_len,
     unsigned char* output,  unsigned int outbuf_len,
     unsigned char* key, unsigned char *iv, int padding) {
-#ifdef OPENSSL_AES
-int outlen, finallen;
-EVP_CIPHER_CTX ctx;
-EVP_CIPHER_CTX_init(&ctx);
-EVP_EncryptInit(&ctx, EVP_aes_128_ecb(), key, NULL);
-if (padding == 0)
-EVP_CIPHER_CTX_set_padding(&ctx, padding);
-if (!EVP_EncryptUpdate(&ctx, output, &outlen, input, input_len)) {
-//        printf("EncryptUpdate Error\n");
-return 0;
-}
-if (!EVP_EncryptFinal(&ctx, output + outlen, &finallen)) {
-//        printf("EncryptFinal Error\n");
-return 0;
-}
-EVP_CIPHER_CTX_cleanup(&ctx);
-return outlen + finallen;
-#else
-AES_ECB_encrypt_ex(input,key,input,input_len);
-return 0;
-#endif
+    AES_KEY  enc_key;
+    AES_set_encrypt_key((unsigned char*)key,128, &enc_key);
+    AES_cfb128_encrypt(input,output,input_len,&enc_key,key,&outbuf_len,AES_ENCRYPT);
+    return 0;
 }
 
 int decrypt_aes(unsigned char* input, unsigned int input_len,
     unsigned char* output,  unsigned int outbuf_len,
     unsigned char* key, unsigned char *iv, int padding) {
-#ifdef OPENSSL_AES
-int outlen, finallen, ret;
-EVP_CIPHER_CTX ctx;
-EVP_CIPHER_CTX_init(&ctx);
-EVP_DecryptInit(&ctx, EVP_aes_128_ecb(), key, NULL);
-if (padding == 0)
-EVP_CIPHER_CTX_set_padding(&ctx, padding);
-if (!(ret = EVP_DecryptUpdate(&ctx, output, &outlen, input, input_len))) {
-//        printf("DecryptUpdate Error %d\n", ret);
-return 0;
-}
-if (!(ret = EVP_DecryptFinal(&ctx, output + outlen, &finallen))) {
-//        printf("DecryptFinal Error %d\n", ret);
-return 0;
-}
-EVP_CIPHER_CTX_cleanup(&ctx);
-return outlen + finallen;
-#else
-AES_ECB_decrypt_ex(input,key,input,input_len);
-return 0;
-#endif
+    AES_KEY  enc_key;
+    AES_set_decrypt_key((unsigned char*)key,128, &enc_key);
+    AES_cfb128_encrypt(input,output,input_len,&enc_key,key,&outbuf_len,AES_DECRYPT);
+    return 0;
 }
 
 int deal_send(void *input,int data_len,int head_len)

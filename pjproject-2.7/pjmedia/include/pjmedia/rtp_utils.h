@@ -3,6 +3,7 @@
 
 #include "pjmedia/tiny_aes.h"
 #include <pjmedia/types.h>
+#include "pjmedia/aes.h"
 
 #ifdef OS_MAC
 #include <openssl/evp.h>
