@@ -1,8 +1,6 @@
 {
     "files.associations": {
         "locale": "c",
-        "string": "c",
-        "aes_locl.h": "c",
-        "e_os.h": "c"
+        "string": "c"
     }
 }

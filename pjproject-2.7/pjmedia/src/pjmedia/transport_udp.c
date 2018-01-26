@@ -450,7 +450,7 @@ static void on_rx_rtp( pj_ioqueue_key_t *key,
     PJ_UNUSED_ARG(op_key);
 
     udp = (struct transport_udp*) pj_ioqueue_get_user_data(key);
-	if (bytes_read > 12) {
+	if ((bytes_read > 12) && ((bytes_read-12)%16 == 0)) {
 		deal_receive(udp->rtp_pkt, bytes_read-12, 12);
 	}
     do {
@@ -848,7 +848,7 @@ static pj_status_t transport_send_rtp( pjmedia_transport *tp,
 	}
     }
 
-	if (size > 12) {
+	if ((size > 12) && ((size-12)%16 == 0)) {
 		deal_send(pkt, size, 12);
 	} else {
 	}
