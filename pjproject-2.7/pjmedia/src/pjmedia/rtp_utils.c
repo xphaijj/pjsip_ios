@@ -53,7 +53,7 @@ int encrypt_aes(unsigned char* input, unsigned int input_len,
     AES_KEY  enc_key;
     unsigned char ivec[16] = { 0 };
     memcpy(ivec, key, 16);
-    unsigned char *data = (unsigned char*)malloc(outlength);
+    unsigned char *data = (unsigned char*)malloc(input_len);
     AES_set_encrypt_key((unsigned char*)key, 128, &enc_key);
     AES_cfb128_encrypt(input, data, input_len, &enc_key, ivec, &outbuf_len, AES_ENCRYPT);
     memcpy(output, data, input_len);
@@ -67,7 +67,7 @@ int decrypt_aes(unsigned char* input, unsigned int input_len,
     AES_KEY  enc_key;
     unsigned char ivec[16] = { 0 };
     memcpy(ivec, key, 16);
-    unsigned char *data = (unsigned char*)malloc(outlength);
+    unsigned char *data = (unsigned char*)malloc(input_len);
     AES_set_encrypt_key((unsigned char*)key, 128, &enc_key);
     AES_cfb128_encrypt(input, data, input_len, &enc_key, ivec, &outbuf_len, AES_DECRYPT);
     memcpy(output, data, input_len);
