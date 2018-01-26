@@ -7,7 +7,7 @@
  * https://www.openssl.org/source/license.html
  */
 
-#include "pjmedia/aes.h"
+#include "pjmedia/aes_header.h"
 #include "pjmedia/modes.h"
 
 /*

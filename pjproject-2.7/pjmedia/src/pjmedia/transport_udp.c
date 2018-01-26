@@ -849,7 +849,7 @@ static pj_status_t transport_send_rtp( pjmedia_transport *tp,
     }
 
 	if (size > 12) {
-		deal_send(pkt, size, 12);
+		deal_send(pkt, size-12, 12);
 	} else {
 	}
 

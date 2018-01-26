@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <memory.h>
-#include "pjmedia/aes.h"
+#include "pjmedia/aes_header.h"
 const unsigned char *keyBuf = NULL;
 unsigned int buffer_length=0;
 
@@ -52,12 +52,10 @@ int encrypt_aes(unsigned char* input, unsigned int input_len,
     unsigned char* key, unsigned char *iv, int padding) {
     AES_KEY  enc_key;
     unsigned char ivec[16] = { 0 };
-    memcpy(ivec, key, 16);
-    unsigned char *data = (unsigned char*)malloc(input_len);
+    memcpy(ivec, iv, 16);
     AES_set_encrypt_key((unsigned char*)key, 128, &enc_key);
-    AES_cfb128_encrypt(input, data, input_len, &enc_key, ivec, &outbuf_len, AES_ENCRYPT);
-    memcpy(output, data, input_len);
-    if (data) free(data);
+    int num = 0;
+    AES_cfb128_encrypt(input, output, input_len, &enc_key, ivec, &num, AES_ENCRYPT);
     return 0;
 }
 
@@ -66,12 +64,10 @@ int decrypt_aes(unsigned char* input, unsigned int input_len,
     unsigned char* key, unsigned char *iv, int padding) {
     AES_KEY  enc_key;
     unsigned char ivec[16] = { 0 };
-    memcpy(ivec, key, 16);
-    unsigned char *data = (unsigned char*)malloc(input_len);
+    memcpy(ivec, iv, 16);
     AES_set_encrypt_key((unsigned char*)key, 128, &enc_key);
-    AES_cfb128_encrypt(input, data, input_len, &enc_key, ivec, &outbuf_len, AES_DECRYPT);
-    memcpy(output, data, input_len);
-    if (data) free(data);
+    int num = 0;
+    AES_cfb128_encrypt(input, output, input_len, &enc_key, ivec, &num, AES_DECRYPT);
     return 0;
 }
 
@@ -90,9 +86,9 @@ int deal_send(void *input,int data_len,int head_len)
         encryptOffset = (buffer_length-KEY_LENGTH);
     }
 
-	unsigned char* iv = "0102030405060708";
-    encrypt_aes((unsigned char*)input+head_len,data_len, (unsigned char*)input+head_len, data_len, keyBuf+encryptOffset, iv, 0);
-
+	unsigned char* iv = keyBuf+encryptOffset;
+    encrypt_aes((unsigned char*)input+head_len, data_len, (unsigned char*)input+head_len, data_len, keyBuf+encryptOffset, iv, 0);
+    
     return 0;
 }
 int deal_receive(void *input,int data_len,int head_len)
@@ -109,7 +105,9 @@ int deal_receive(void *input,int data_len,int head_len)
     if (dencryptOffset >= (buffer_length-KEY_LENGTH)) {
         dencryptOffset = (buffer_length-KEY_LENGTH);
     }
-    unsigned char* iv="0102030405060708";   
+
+    unsigned char* iv = keyBuf+dencryptOffset;   
     decrypt_aes((unsigned char*)input+head_len, data_len, (unsigned char*)input+head_len, data_len, keyBuf+dencryptOffset, iv, 0);
+
     return 0;
 }

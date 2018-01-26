@@ -40,7 +40,7 @@
 
 #include <stdlib.h>
 //#include <openssl/crypto.h>
-#include "pjmedia/aes.h"
+#include "pjmedia/aes_header.h"
 #include "pjmedia/aes_locl.h"
 
 #ifndef AES_ASM
