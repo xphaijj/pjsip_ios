@@ -1,6 +1,10 @@
 {
     "files.associations": {
         "locale": "c",
-        "string": "c"
+        "string": "c",
+        "aes.h": "c",
+        "iterator": "c",
+        "string_view": "c",
+        "vector": "c"
     }
 }

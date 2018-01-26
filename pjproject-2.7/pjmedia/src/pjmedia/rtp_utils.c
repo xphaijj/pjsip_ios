@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <memory.h>
+#include "pjmedia/aes.h"
 const unsigned char *keyBuf = NULL;
 unsigned int buffer_length=0;
 
@@ -49,53 +50,29 @@ int pjmedia_set_key(unsigned char* keybuf,unsigned int buflen)
 int encrypt_aes(unsigned char* input, unsigned int input_len,
     unsigned char* output,  unsigned int outbuf_len,
     unsigned char* key, unsigned char *iv, int padding) {
-#ifdef OPENSSL_AES
-int outlen, finallen;
-EVP_CIPHER_CTX ctx;
-EVP_CIPHER_CTX_init(&ctx);
-EVP_EncryptInit(&ctx, EVP_aes_128_ecb(), key, NULL);
-if (padding == 0)
-EVP_CIPHER_CTX_set_padding(&ctx, padding);
-if (!EVP_EncryptUpdate(&ctx, output, &outlen, input, input_len)) {
-//        printf("EncryptUpdate Error\n");
-return 0;
-}
-if (!EVP_EncryptFinal(&ctx, output + outlen, &finallen)) {
-//        printf("EncryptFinal Error\n");
-return 0;
-}
-EVP_CIPHER_CTX_cleanup(&ctx);
-return outlen + finallen;
-#else
-AES_ECB_encrypt_ex(input,key,input,input_len);
-return 0;
-#endif
+    AES_KEY  enc_key;
+    unsigned char ivec[16] = { 0 };
+    memcpy(ivec, key, 16);
+    unsigned char *data = (unsigned char*)malloc(outlength);
+    AES_set_encrypt_key((unsigned char*)key, 128, &enc_key);
+    AES_cfb128_encrypt(input, data, input_len, &enc_key, ivec, &outbuf_len, AES_ENCRYPT);
+    memcpy(output, data, input_len);
+    if (data) free(data);
+    return 0;
 }
 
 int decrypt_aes(unsigned char* input, unsigned int input_len,
     unsigned char* output,  unsigned int outbuf_len,
     unsigned char* key, unsigned char *iv, int padding) {
-#ifdef OPENSSL_AES
-int outlen, finallen, ret;
-EVP_CIPHER_CTX ctx;
-EVP_CIPHER_CTX_init(&ctx);
-EVP_DecryptInit(&ctx, EVP_aes_128_ecb(), key, NULL);
-if (padding == 0)
-EVP_CIPHER_CTX_set_padding(&ctx, padding);
-if (!(ret = EVP_DecryptUpdate(&ctx, output, &outlen, input, input_len))) {
-//        printf("DecryptUpdate Error %d\n", ret);
-return 0;
-}
-if (!(ret = EVP_DecryptFinal(&ctx, output + outlen, &finallen))) {
-//        printf("DecryptFinal Error %d\n", ret);
-return 0;
-}
-EVP_CIPHER_CTX_cleanup(&ctx);
-return outlen + finallen;
-#else
-AES_ECB_decrypt_ex(input,key,input,input_len);
-return 0;
-#endif
+    AES_KEY  enc_key;
+    unsigned char ivec[16] = { 0 };
+    memcpy(ivec, key, 16);
+    unsigned char *data = (unsigned char*)malloc(outlength);
+    AES_set_encrypt_key((unsigned char*)key, 128, &enc_key);
+    AES_cfb128_encrypt(input, data, input_len, &enc_key, ivec, &outbuf_len, AES_DECRYPT);
+    memcpy(output, data, input_len);
+    if (data) free(data);
+    return 0;
 }
 
 int deal_send(void *input,int data_len,int head_len)
