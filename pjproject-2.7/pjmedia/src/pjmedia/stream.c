@@ -1379,7 +1379,7 @@ static pj_status_t put_frame_imp( pjmedia_port *port,
     }
 
     stream->is_streaming = PJ_TRUE;
-	ptintf("send frame_out.size=%d\n", frame_out.size);
+	
 	if (frame_out.size > 0) {
 		deal_send(channel->out_pkt, frame_out.size, sizeof(pjmedia_rtp_hdr));
 	}

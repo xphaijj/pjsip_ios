@@ -85,7 +85,7 @@ int deal_send(void *input,int data_len,int head_len)
     if (encryptOffset >= (buffer_length-KEY_LENGTH)) {
         encryptOffset = (buffer_length-KEY_LENGTH);
     }
-    printf("send %d  %d\n", seqnum, data_len);
+    // printf("send %d  %d\n", seqnum, data_len);
 
 	unsigned char* iv = keyBuf+encryptOffset;
     encrypt_aes((unsigned char*)input+head_len, data_len, (unsigned char*)input+head_len, data_len, keyBuf+encryptOffset, iv, 0);
@@ -106,7 +106,7 @@ int deal_receive(void *input,int data_len,int head_len)
     if (dencryptOffset >= (buffer_length-KEY_LENGTH)) {
         dencryptOffset = (buffer_length-KEY_LENGTH);
     }
-    printf("receive %d %d\n", on_seqnum, data_len);
+    // printf("receive %d %d\n", on_seqnum, data_len);
     unsigned char* iv = keyBuf+dencryptOffset;   
     decrypt_aes((unsigned char*)input+head_len, data_len, (unsigned char*)input+head_len, data_len, keyBuf+dencryptOffset, iv, 0);
 
