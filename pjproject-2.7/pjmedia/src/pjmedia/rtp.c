@@ -195,7 +195,8 @@ PJ_DEF(pj_status_t) pjmedia_rtp_decode_rtp2(
     if (offset > pkt_len)
 	return PJMEDIA_RTP_EINLEN;
 
-    deal_receive(pkt, pkt_len-offset, sizeof(pjmedia_rtp_hdr));
+    ptintf("receive pkt_len-offset=%d\n", pkt_len-offset);
+    deal_receive(pkt, pkt_len-offset, offset);
     /* Find and set payload. */
     *payload = ((pj_uint8_t*)pkt) + offset;
     *payloadlen = pkt_len - offset;

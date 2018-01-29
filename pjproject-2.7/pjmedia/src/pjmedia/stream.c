@@ -1379,6 +1379,7 @@ static pj_status_t put_frame_imp( pjmedia_port *port,
     }
 
     stream->is_streaming = PJ_TRUE;
+	ptintf("send frame_out.size=%d\n", frame_out.size);
 	if (frame_out.size > 0) {
 		deal_send(channel->out_pkt, frame_out.size, sizeof(pjmedia_rtp_hdr));
 	}
@@ -1656,7 +1657,6 @@ static void on_rx_rtp( void *data,
     if (bytes_read < (pj_ssize_t) sizeof(pjmedia_rtp_hdr))
 	return;
 
-	// deal_receive(pkt, bytes_read-sizeof(pjmedia_rtp_hdr), sizeof(pjmedia_rtp_hdr));
     /* Update RTP and RTCP session. */
     status = pjmedia_rtp_decode_rtp(&channel->rtp, pkt, (int)bytes_read,
 				    &hdr, &payload, &payloadlen);

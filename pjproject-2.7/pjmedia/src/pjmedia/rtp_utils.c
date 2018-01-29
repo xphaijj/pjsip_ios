@@ -52,7 +52,7 @@ int encrypt_aes(unsigned char* input, unsigned int input_len,
     unsigned char* key, unsigned char *iv, int padding) {
     AES_KEY  enc_key;
     unsigned char ivec[16] = { 0 };
-    // memcpy(ivec, iv, 16);
+    memcpy(ivec, iv, 16);
     AES_set_encrypt_key((unsigned char*)key, 128, &enc_key);
     int num = 0;
     AES_cfb128_encrypt(input, output, input_len, &enc_key, ivec, &num, AES_ENCRYPT);
@@ -64,7 +64,7 @@ int decrypt_aes(unsigned char* input, unsigned int input_len,
     unsigned char* key, unsigned char *iv, int padding) {
     AES_KEY  enc_key;
     unsigned char ivec[16] = { 0 };
-    // memcpy(ivec, iv, 16);
+    memcpy(ivec, iv, 16);
     AES_set_encrypt_key((unsigned char*)key, 128, &enc_key);
     int num = 0;
     AES_cfb128_encrypt(input, output, input_len, &enc_key, ivec, &num, AES_DECRYPT);
