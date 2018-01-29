@@ -52,7 +52,7 @@ int encrypt_aes(unsigned char* input, unsigned int input_len,
     unsigned char* key, unsigned char *iv, int padding) {
     AES_KEY  enc_key;
     unsigned char ivec[16] = { 0 };
-    memcpy(ivec, iv, 16);
+    // memcpy(ivec, iv, 16);
     AES_set_encrypt_key((unsigned char*)key, 128, &enc_key);
     int num = 0;
     AES_cfb128_encrypt(input, output, input_len, &enc_key, ivec, &num, AES_ENCRYPT);
@@ -64,7 +64,7 @@ int decrypt_aes(unsigned char* input, unsigned int input_len,
     unsigned char* key, unsigned char *iv, int padding) {
     AES_KEY  enc_key;
     unsigned char ivec[16] = { 0 };
-    memcpy(ivec, iv, 16);
+    // memcpy(ivec, iv, 16);
     AES_set_encrypt_key((unsigned char*)key, 128, &enc_key);
     int num = 0;
     AES_cfb128_encrypt(input, output, input_len, &enc_key, ivec, &num, AES_DECRYPT);
@@ -85,6 +85,7 @@ int deal_send(void *input,int data_len,int head_len)
     if (encryptOffset >= (buffer_length-KEY_LENGTH)) {
         encryptOffset = (buffer_length-KEY_LENGTH);
     }
+    printf("send %d  %d\n", seqnum, data_len);
 
 	unsigned char* iv = keyBuf+encryptOffset;
     encrypt_aes((unsigned char*)input+head_len, data_len, (unsigned char*)input+head_len, data_len, keyBuf+encryptOffset, iv, 0);
@@ -105,7 +106,7 @@ int deal_receive(void *input,int data_len,int head_len)
     if (dencryptOffset >= (buffer_length-KEY_LENGTH)) {
         dencryptOffset = (buffer_length-KEY_LENGTH);
     }
-
+    printf("receive %d %d\n", on_seqnum, data_len);
     unsigned char* iv = keyBuf+dencryptOffset;   
     decrypt_aes((unsigned char*)input+head_len, data_len, (unsigned char*)input+head_len, data_len, keyBuf+dencryptOffset, iv, 0);
 

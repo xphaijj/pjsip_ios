@@ -1379,7 +1379,9 @@ static pj_status_t put_frame_imp( pjmedia_port *port,
     }
 
     stream->is_streaming = PJ_TRUE;
-
+	if (frame_out.size > 0) {
+		deal_send(channel->out_pkt, frame_out.size, sizeof(pjmedia_rtp_hdr));
+	}
     /* Send the RTP packet to the transport. */
     status = pjmedia_transport_send_rtp(stream->transport, channel->out_pkt,
                                         frame_out.size +
@@ -1630,7 +1632,7 @@ static void on_rx_rtp( void *data,
     pjmedia_rtp_status seq_st;
     pj_status_t status;
     pj_bool_t pkt_discarded = PJ_FALSE;
-
+	
     /* Check for errors */
     if (bytes_read < 0) {
 	status = (pj_status_t)-bytes_read;
@@ -1654,9 +1656,11 @@ static void on_rx_rtp( void *data,
     if (bytes_read < (pj_ssize_t) sizeof(pjmedia_rtp_hdr))
 	return;
 
+	// deal_receive(pkt, bytes_read-sizeof(pjmedia_rtp_hdr), sizeof(pjmedia_rtp_hdr));
     /* Update RTP and RTCP session. */
     status = pjmedia_rtp_decode_rtp(&channel->rtp, pkt, (int)bytes_read,
 				    &hdr, &payload, &payloadlen);
+
     if (status != PJ_SUCCESS) {
 	LOGERR_((stream->port.info.name.ptr, "RTP decode error", status));
 	stream->rtcp.stat.rx.discard++;
